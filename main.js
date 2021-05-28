@@ -1,3 +1,5 @@
+var currentPlay = "X"
+
 var circle = document.createElement("div")
   .innerHTML =
     `
@@ -24,11 +26,22 @@ $(".play-area").ready(function(){
       .addClass("box")
       .attr("id", "box" + i.toString())
       .attr("style", "grid-area: box" + i.toString() + ";")
-      .append(x)
-
+      .attr("data-played", " ")
     ;
-
     $(".play-area").append($newDiv)
 
   }
+
+  $(".box").on("click", function(){
+    if($(this).attr("data-played") == " ") {
+      $(this).attr("data-played", currentPlay);
+        if(currentPlay == "X"){
+          $(this).append(x);
+          currentPlay = "O";
+        }else{
+          $(this).append(circle);
+          currentPlay="X"
+        }
+    }
+  })
 })
