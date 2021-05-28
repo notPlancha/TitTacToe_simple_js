@@ -1,0 +1,16 @@
+body{
+  margin: 0px;
+}
+
+
+.play-area{
+  margin:auto;
+  width: 250px;
+  height: 250px;
+  display: grid;
+  grid-template-areas:
+  "box1 box2 box3"
+  "box4 box5 box6"
+  "box7 box8 box9";
+  background-color: #ffa08c;
+}
