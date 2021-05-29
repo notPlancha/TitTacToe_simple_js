@@ -53,7 +53,6 @@ function win(lastPlayed){
 }
 
 $(".play-area").ready(function(){
-  var winner = false;
   for (var i = 1; i <= 9; i++) {
     let $newDiv = $(document.createElement('div'))
       .addClass("box")
@@ -71,9 +70,6 @@ $(".play-area").ready(function(){
   $(".box").on("click", function(){
     if($(this).attr("data-played") == " ") {
       $(this).attr("data-played", currentPlay);
-      if(currentPlay == "X") $(this).append(x.cloneNode(true));
-      else $(this).append(circle.cloneNode(true));
-
       if(win(currentPlay)){
         $(".next-play-caption > h2").text("Winner:");
         $(".box").off("click");
@@ -93,5 +89,21 @@ $(".play-area").ready(function(){
         }
       }
     }
+  });
+  $("[data-played]").attrchange({
+    trackValues:true,
+    callback: function (event){
+      switch(event.newValue){
+        case "X":
+          $(this).append(x.cloneNode(true));
+          break;
+        case "O":
+          $(this).append(circle.cloneNode(true));
+          break;
+        case " ":
+          $(this).find(":first-child").remove();
+          break;
+      }
+    }
   })
-})
+});
