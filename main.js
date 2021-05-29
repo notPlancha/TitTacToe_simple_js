@@ -20,7 +20,40 @@ x.innerHTML =
 `
 x.classList.add("x");
 
+function win(lastPlayed){
+  //returns false if no one won
+  let wins = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+    [1, 4, 7],
+    [2, 5, 8],
+    [3, 6, 9],
+    [1, 5, 9],
+    [3, 5, 7]
+  ];
+  let intsToStrings = function(arr){
+    return arr.map(x => "box" + x.toString());
+  };
+  wins = wins.map(intsToStrings);
+
+  let places = [];
+  $(`[data-played="${lastPlayed}"]`).each(function(){
+    places.push($(this).attr("id"));
+  });
+  var count;
+  for (var i = 0; i < wins.length; i++) {
+    count = 0;
+    for (var i2 = 0; i2 < places.length; i2++) {
+      if(wins[i].includes(places[i2])) count += 1;
+    }
+    if(count >= 3) return true;
+  }
+  return false;
+}
+
 $(".play-area").ready(function(){
+  var winner = false;
   for (var i = 1; i <= 9; i++) {
     let $newDiv = $(document.createElement('div'))
       .addClass("box")
@@ -38,21 +71,27 @@ $(".play-area").ready(function(){
   $(".box").on("click", function(){
     if($(this).attr("data-played") == " ") {
       $(this).attr("data-played", currentPlay);
-      if(currentPlay == "X"){
-        $(this).append(x.cloneNode(true));
-        currentPlay = "O";
-        $(".next-play-image > .x").hide();
-        $(".next-play-image > .circle").show();
-      }else{
-        $(this).append(circle.cloneNode(true));
-        currentPlay="X"
+      if(currentPlay == "X") $(this).append(x.cloneNode(true));
+      else $(this).append(circle.cloneNode(true));
+
+      if(win(currentPlay)){
+        $(".next-play-caption > h2").text("Winner:");
+        $(".box").off("click");
+      }else if($('[data-played=" "]').length <= 0){
+        $(".next-play-caption > h2").text("Draw");
         $(".next-play-image > .circle").hide();
-        $(".next-play-image > .x").show();
+        $(".next-play-image > .x").hide();
+      }else{
+        if(currentPlay == "X"){
+          currentPlay = "O";
+          $(".next-play-image > .x").hide();
+          $(".next-play-image > .circle").show();
+        }else{
+          currentPlay="X"
+          $(".next-play-image > .circle").hide();
+          $(".next-play-image > .x").show();
+        }
       }
     }
-
   })
-
-
-
 })
